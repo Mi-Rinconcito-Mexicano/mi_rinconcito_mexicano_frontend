@@ -38,7 +38,7 @@ export default function Navbar() {
             </Typography>
 
             <Button color="inherit" component={Link} to='/'>Home</Button>
-            <Button color="inherit" component={Link} to='/Menu'>Menu</Button>
+            <Button color="inherit" component={Link} to='/menu'>Menu</Button>
             <Button color="inherit" component={Link} to='/panaderia'>Panaderia</Button>
         </Toolbar>
     </AppBar>

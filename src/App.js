@@ -4,7 +4,8 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import Navbar from './Components/Navbar'
+import Navbar from './Components/Navbar';
+import Menu from './Components/Menu/Menu';
 
 function App() {
   return (
@@ -13,13 +14,14 @@ function App() {
 
       <Switch>
 
-        <Route path="/">
+        <Route path="panaderia">
         </Route>
 
         <Route path="/menu">
+          <Menu />
         </Route>
 
-        <Route path="/panaderia">
+        <Route path="/">
         </Route>
 
       </Switch>
