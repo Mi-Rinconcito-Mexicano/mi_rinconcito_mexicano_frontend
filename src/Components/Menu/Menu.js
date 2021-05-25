@@ -20,6 +20,10 @@ const useStyles = makeStyles((theme) => ({
   categoryItemsPadding: {
     paddingBottom: "15px",
   },
+  tags: {
+    marginLeft: 4,
+    marginRight: 4,
+  }
 }));
 
 function ItemExtras(props) {
@@ -27,6 +31,17 @@ function ItemExtras(props) {
     return (
       <Typography align="center" key={extra.info}>
         {extra.info}.....${extra.price}
+      </Typography>
+    );
+  });
+}
+
+function ItemTags(props) {
+  const classes = useStyles();
+  return props.tags.map((tag) => {
+    return (
+      <Typography className={classes.tags} display="inline" key={tag}>
+        {tag}
       </Typography>
     );
   });
@@ -43,15 +58,24 @@ function CategoryItem(props) {
     }
   };
 
+  const hasTags = () => {
+    if (props.menuItem.tags.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   return (
     <Grid item lg={4} md={6} xs={12} className={classes.categoryItemsPadding}>
       <Typography align="center">{props.menuItem.name}</Typography>
 
-      <Typography align="center">{props.menuItem.description}</Typography>
+      <Typography align="left">{props.menuItem.description}</Typography>
 
       <Typography align="center">{props.menuItem.price}</Typography>
 
       {hasExtras ? <ItemExtras extras={props.menuItem.extra} /> : <br />}
+      {hasTags ? <ItemTags tags={props.menuItem.tags} /> : <br />}
     </Grid>
   );
 }
@@ -94,21 +118,23 @@ export default function Menu() {
   }
 
   return (
-    <Grid container>
-      <Grid item xs={12}>
-        <Typography variant="h3" align="center" gutterBottom>
-          Menu
-        </Typography>
-      </Grid>
+    <Container>
+      <Grid container>
+        <Grid item xs={12}>
+          <Typography variant="h3" align="center" gutterBottom>
+            Menu
+          </Typography>
+        </Grid>
 
-      {menu.data.map((menuInfo) => {
-        return (
-          <MenuCategory
-            attributes={menuInfo.attributes}
-            key={menuInfo.attributes.category}
-          />
-        );
-      })}
-    </Grid>
+        {menu.data.map((menuInfo) => {
+          return (
+            <MenuCategory
+              attributes={menuInfo.attributes}
+              key={menuInfo.attributes.category}
+            />
+          );
+        })}
+      </Grid>
+    </Container>
   );
 }
