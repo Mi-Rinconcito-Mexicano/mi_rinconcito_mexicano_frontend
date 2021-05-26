@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import Container from "@material-ui/core/Container";
-import Card from "@material-ui/core/Card";
-import Typography from "@material-ui/core/Typography";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import { CardContent, Paper } from "@material-ui/core";
+import { 
+  CardContent, 
+  Grid, 
+  Container,
+  Card,
+  Chip,
+  Typography,
+  CircularProgress } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,23 +18,24 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     align: "center",
   },
-  categoryBottomPadding: {
-    paddingBottom: "15px",
-  },
-  categoryItemsPadding: {
-    paddingBottom: "15px",
-  },
   tagsGrid: {
     align: "center",
   },
+  chip: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    '& > *': {
+      margin: theme.spacing(0.5),
+    },
+  }
 }));
 
 // Returns extras the menu item has
 function ItemExtras(props) {
   return props.extras.map((extra) => {
     return (
-      <Typography variant="body2" component="p" key={extra.info}>
-        {extra.info}
+      <Typography variant="body2" component="p" key={extra}>
+        {extra}
       </Typography>
     );
   });
@@ -40,19 +43,16 @@ function ItemExtras(props) {
 
 // Returns a any tags the menu item has in a grid
 function ItemTags(props) {
+  const classes = useStyles();
   return (
-    <Grid container>
+    <div className={classes.chip}>
       {props.tags.map((tag) => {
-        return (
-          <Grid item xs={4}>
-            <Paper>
-              <Typography align="center">{tag}</Typography>
-            </Paper>
-          </Grid>
-        );
+          return(
+            <Chip label={tag} key={tag} />
+          )
       })}
-    </Grid>
-  );
+    </div>
+  )
 }
 
 // Returns the menu description
@@ -66,8 +66,6 @@ function ItemDescription(props) {
 
 // Returns the menu category item and its different components
 function CategoryItem(props) {
-  const classes = useStyles();
-
   // Checks if item has any extras
   const hasExtras = () => {
     if (props.menuItem.extra.length === 0) {
@@ -96,7 +94,7 @@ function CategoryItem(props) {
   };
 
   return (
-    <Grid item lg={4} md={6} xs={12} className={classes.categoryItemsPadding}>
+    <Grid item lg={4} md={6} xs={12}>
       <Card>
         <CardContent>
           <Typography variant="h5" component="h2">
@@ -114,7 +112,6 @@ function CategoryItem(props) {
 
 // Returns a menu category and items in the category
 function MenuCategory(props) {
-  const classes = useStyles();
   return (
     <React.Fragment>
       <Grid item xs={12}>
