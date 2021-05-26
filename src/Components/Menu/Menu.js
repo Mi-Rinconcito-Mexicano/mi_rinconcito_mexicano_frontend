@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { 
+  CardContent, 
+  Grid, 
+  Container,
+  Card,
+  Chip,
+  Typography,
+  CircularProgress } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,50 +18,100 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     align: "center",
   },
-  categoryBottomPadding: {
-    paddingBottom: "15px",
+  tagsGrid: {
+    align: "center",
   },
-  categoryItemsPadding: {
-    paddingBottom: "15px",
-  },
+  chip: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    '& > *': {
+      margin: theme.spacing(0.5),
+    },
+  }
 }));
 
+// Returns extras the menu item has
 function ItemExtras(props) {
   return props.extras.map((extra) => {
     return (
-      <Typography align="center" key={extra.info}>
-        {extra.info}.....${extra.price}
+      <Typography variant="body2" component="p" key={extra}>
+        {extra}
       </Typography>
     );
   });
 }
 
-function CategoryItem(props) {
+// Returns a any tags the menu item has in a grid
+function ItemTags(props) {
   const classes = useStyles();
+  return (
+    <div className={classes.chip}>
+      {props.tags.map((tag) => {
+          return(
+            <Chip label={tag} key={tag} />
+          )
+      })}
+    </div>
+  )
+}
 
+// Returns the menu description
+function ItemDescription(props) {
+  return (
+    <Typography paragraph variant="body2" component="p">
+      {props.description}
+    </Typography>
+  );
+}
+
+// Returns the menu category item and its different components
+function CategoryItem(props) {
+  // Checks if item has any extras
   const hasExtras = () => {
-    if (props.menuItem.extra.length > 0) {
-      return true;
-    } else {
+    if (props.menuItem.extra.length === 0) {
       return false;
+    } else {
+      return true;
+    }
+  };
+
+  // Checks if item has any tags
+  const hasTags = () => {
+    if (props.menuItem.tags.length === 0) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  // Checks if item has a description
+  const hasDescription = () => {
+    if (props.menuItem.description === null) {
+      return false;
+    } else {
+      return true;
     }
   };
 
   return (
-    <Grid item lg={4} md={6} xs={12} className={classes.categoryItemsPadding}>
-      <Typography align="center">{props.menuItem.name}</Typography>
+    <Grid item lg={4} md={6} xs={12}>
+      <Card>
+        <CardContent>
+          <Typography variant="h5" component="h2">
+            {props.menuItem.name}
+          </Typography>
 
-      <Typography align="center">{props.menuItem.description}</Typography>
-
-      <Typography align="center">{props.menuItem.price}</Typography>
-
-      {hasExtras ? <ItemExtras extras={props.menuItem.extra} /> : <br />}
+          {hasDescription() ? <ItemDescription description={props.menuItem.description} /> : null}
+          {hasExtras() ? <ItemExtras extras={props.menuItem.extra} /> : null}
+          {hasTags() ? <ItemTags tags={props.menuItem.tags} /> : null}
+        </CardContent>
+      </Card>
     </Grid>
   );
 }
 
+// Returns a menu category and items in the category
 function MenuCategory(props) {
-  const classes = useStyles();
   return (
     <React.Fragment>
       <Grid item xs={12}>
@@ -94,21 +148,23 @@ export default function Menu() {
   }
 
   return (
-    <Grid container>
-      <Grid item xs={12}>
-        <Typography variant="h3" align="center" gutterBottom>
-          Menu
-        </Typography>
-      </Grid>
+    <Container>
+      <Grid container className={classes.root} spacing={4}>
+        <Grid item xs={12}>
+          <Typography variant="h3" align="center" gutterBottom>
+            Menu
+          </Typography>
+        </Grid>
 
-      {menu.data.map((menuInfo) => {
-        return (
-          <MenuCategory
-            attributes={menuInfo.attributes}
-            key={menuInfo.attributes.category}
-          />
-        );
-      })}
-    </Grid>
+        {menu.data.map((menuInfo) => {
+          return (
+            <MenuCategory
+              attributes={menuInfo.attributes}
+              key={menuInfo.attributes.category}
+            />
+          );
+        })}
+      </Grid>
+    </Container>
   );
 }
