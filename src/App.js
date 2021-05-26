@@ -4,8 +4,10 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import Navbar from './Components/Navbar';
+import Navbar from './Components/Navbar/Navbar';
 import Menu from './Components/Menu/Menu';
+import Panaderia from './Components/Panaderia/Panaderia'
+import Home from './Components/Home/Home'
 
 function App() {
   return (
@@ -14,7 +16,8 @@ function App() {
 
       <Switch>
 
-        <Route path="panaderia">
+        <Route path="/panaderia">
+          <Panaderia />
         </Route>
 
         <Route path="/menu">
@@ -22,6 +25,7 @@ function App() {
         </Route>
 
         <Route path="/">
+          <Home />
         </Route>
 
       </Switch>
